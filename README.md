@@ -11,6 +11,7 @@
 <details><summary>Tap On Me For Bot Features</summary>
 
  - Automatically approve join request in channel Or groups.
+ - Pending request also approved in channel Or groups.
 - Fully modified repo
 - Force Sub available
 - Broadcast available
@@ -25,6 +26,9 @@
 ```
 start - Check Bot Alive.
 users - Check total users.
+login : login your telegram account for string session
+logout : logout your telegram account
+accept : accept all pending request form channel or group.
 broadcast - Broadcast Massage Send All Users In Bot.
 ```
 </details>
@@ -35,9 +39,10 @@ broadcast - Broadcast Massage Send All Users In Bot.
 
   - `API_ID` - Your Telegram API ID.Get it [Here](https://youtu.be/RdMY6Lqfi9w)
   - `API_HASH` - Your Telegram API HASH.Get it [Here](https://youtu.be/RdMY6Lqfi9w))
-  - `DB_URL` - Mongodb [Database](https://youtu.be/pMJpHoiu1go)
+  - `DB_URI` - Mongodb [Database](https://youtu.be/pMJpHoiu1go)
   - `BOT_TOKEN` - Get From [BotFather](https://youtu.be/aJILCCXfNVM)
-  - `AUTH_CHANNEL` - Your Force subscribe channel id
+  - `AUTH_CHANNEL` - Your Force subscribe channel id.
+   - `LOG_CHANNEL` - Your log channel id
   - `ADMINS` - bot owners Id/ ids ( for broadcast and stats cmds). for multiple use space.
 </details>
 
@@ -48,7 +53,7 @@ broadcast - Broadcast Massage Send All Users In Bot.
 
 💖 [TechifyBots](https://github.com/TechifyBots)
 
-💞 [MrMKN](https://github.com/MrMKN)
+💞 [VJBots](https://github.com/VJBots)
 </details>
 
 ### 💕 CONTACT DEVELOPER
