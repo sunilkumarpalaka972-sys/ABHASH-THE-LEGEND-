@@ -94,7 +94,7 @@ async def accept(client, message):
     except Exception as e:
         await msg.edit(f"**An error occurred:** {str(e)}")
 
-@Client.on_chat_join_request(filters.group | filters.channel)
+@Client.on_chat_join_request()
 async def approve_new(client, m):
     if NEW_REQ_MODE == False:
         return 
