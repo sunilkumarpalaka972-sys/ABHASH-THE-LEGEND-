@@ -4,7 +4,7 @@ API_ID = int(environ.get("API_ID", ""))
 API_HASH = environ.get("API_HASH", "")
 BOT_TOKEN = environ.get("BOT_TOKEN", "")
 
-# Make Bot Admin In Log Channel With Full Rights
+AUTH_CHANNEL = int(environ.get("AUTH_CHANNEL", ""))
 LOG_CHANNEL = int(environ.get("LOG_CHANNEL", ""))
 ADMINS = int(environ.get("ADMINS", ""))
 
