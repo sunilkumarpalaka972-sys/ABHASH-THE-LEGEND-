@@ -13,4 +13,4 @@ DB_URI = environ.get("DB_URI", "")
 DB_NAME = environ.get("DB_NAME", "autoacceptbot")
 
 # If this is True Then Bot Accept New Join Request 
-NEW_REQ_MODE = bool(environ.get('NEW_REQ_MODE', False))
+NEW_REQ_MODE = bool(environ.get('NEW_REQ_MODE', True))
