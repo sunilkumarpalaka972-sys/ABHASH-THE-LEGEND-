@@ -97,7 +97,7 @@ async def help_message(c,m):
 async def users(bot, message):
    total_users = await db.total_users_count()
    await message.reply_text(
-        text='Total Users = {total_users}'
+        text=f'Total Users = {total_users}'
    )
 
 @Client.on_message(filters.command("broadcast") & filters.user(ADMINS) & filters.reply)
