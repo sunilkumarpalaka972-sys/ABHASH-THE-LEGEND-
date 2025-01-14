@@ -1,11 +1,10 @@
-FROM python:latest
+from flask import Flask
+app = Flask(__name__)
 
-RUN apt-get update -y && apt-get upgrade -y
+@app.route('/')
+def hello_world():
+    return 'TechifyBots'
 
-RUN pip3 install -U pip
 
-COPY . /app/
-WORKDIR /app/
-RUN pip3 install -U -r requirements.txt
-
-CMD python3 bot.py
+if __name__ == "__main__":
+    app.run()
