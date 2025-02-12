@@ -16,8 +16,7 @@
 - Force Sub available
 - Broadcast available
 - Deploy To Koyeb + Heroku + Railway + Render + VPS + Okteto
-
-- Developer Service 24x7.
+- [Developer support](https://telegram.me/TechifySupport) 24x7
 </details>
 
 ### 😍 COMMANDS
