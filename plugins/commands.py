@@ -48,21 +48,23 @@ async def broadcast_messages(user_id, message):
         await message.copy(chat_id=user_id)
         return True, "Success"
     except FloodWait as e:
+        logging.warning(f"FloodWait: Sleeping for {e.value} seconds before retrying...")
         await asyncio.sleep(e.value)
         return await broadcast_messages(user_id, message)
     except InputUserDeactivated:
         await db.delete_user(int(user_id))
-        logging.info(f"{user_id}-Removed from Database, since deleted account.")
+        logging.info(f"{user_id} - Removed from database (Deleted Account)")
         return False, "Deleted"
     except UserIsBlocked:
         await db.delete_user(int(user_id))
-        logging.info(f"{user_id} -Blocked the bot.")
+        logging.info(f"{user_id} - Blocked the bot")
         return False, "Blocked"
     except PeerIdInvalid:
         await db.delete_user(int(user_id))
-        logging.info(f"{user_id} - PeerIdInvalid")
+        logging.warning(f"{user_id} - Peer ID Invalid (User never started the bot)")
         return False, "Error"
     except Exception as e:
+        logging.error(f"Unknown error for {user_id}: {e}")
         return False, "Error"
 
 @Client.on_message(filters.command('start'))
