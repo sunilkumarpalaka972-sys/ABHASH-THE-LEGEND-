@@ -1,6 +1,6 @@
 import asyncio 
 from pyrogram import Client, filters, enums
-from config import LOG_CHANNEL, API_ID, API_HASH, NEW_REQ_MODE, AUTH_CHANNEL, ADMINS
+from config import LOG_CHANNEL, API_ID, API_HASH, NEW_REQ_MODE, ADMINS
 from plugins.database import db
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import InputUserDeactivated, UserNotParticipant, FloodWait, UserIsBlocked, PeerIdInvalid
@@ -10,7 +10,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 LOG_TEXT = """<b>#NewUser
     
@@ -19,72 +18,18 @@ ID - <code>{}</code>
 Name - {}</b>
 """
 
-async def get_fsub(bot, message):
-    target_channel_id = AUTH_CHANNEL  # Your channel ID
-    user_id = message.from_user.id
-    try:
-        # Check if user is a member of the required channel
-        await bot.get_chat_member(target_channel_id, user_id)
-    except UserNotParticipant:
-        # Generate the channel invite link
-        channel_link = (await bot.get_chat(target_channel_id)).invite_link
-        join_button = InlineKeyboardButton("🔔 Join Our Channel", url=channel_link)
-
-        # Display a message encouraging the user to join
-        keyboard = [[join_button]]
-        await message.reply(
-            f"<b>👋 Hello {message.from_user.mention()}, Welcome!</b>\n\n"
-            "📢 <b>Exclusive Access Alert!</b> ✨\n\n"
-            "To unlock all the amazing features I offer, please join our updates channel. "
-            "This helps us keep you informed and ensures top-notch service just for you! 😊\n\n"
-            "<i>🚀 Join now and dive into a world of knowledge and creativity!</i>",
-            reply_markup=InlineKeyboardMarkup(keyboard),
-        )
-        return False
-    else:
-        return True
-
-async def broadcast_messages(user_id, message):
-    try:
-        await message.copy(chat_id=user_id)
-        return True, "Success"
-    except FloodWait as e:
-        logging.warning(f"FloodWait: Sleeping for {e.value} seconds before retrying...")
-        await asyncio.sleep(e.value)
-        return await broadcast_messages(user_id, message)
-    except InputUserDeactivated:
-        await db.delete_user(int(user_id))
-        logging.info(f"{user_id} - Removed from database (Deleted Account)")
-        return False, "Deleted"
-    except UserIsBlocked:
-        await db.delete_user(int(user_id))
-        logging.info(f"{user_id} - Blocked the bot")
-        return False, "Blocked"
-    except PeerIdInvalid:
-        await db.delete_user(int(user_id))
-        logging.warning(f"{user_id} - Peer ID Invalid (User never started the bot)")
-        return False, "Error"
-    except Exception as e:
-        logging.error(f"Unknown error for {user_id}: {e}")
-        return False, "Error"
-
 @Client.on_message(filters.command('start'))
 async def start_message(c, m):
     if not await db.is_user_exist(m.from_user.id):
         await db.add_user(m.from_user.id, m.from_user.first_name)
         await c.send_message(LOG_CHANNEL, LOG_TEXT.format(m.from_user.id, m.from_user.mention))
-    
-    is_subscribed = await get_fsub(c, m)
-    if not is_subscribed:
-        return
-
     await m.reply_text(
-        f"{m.from_user.mention},\n\n𝖨 𝖼𝖺𝗇 𝖺𝗎𝗍𝗈𝗆𝖺𝗍𝗂𝖼𝖺𝗅𝗅𝗒 𝖺𝗉𝗉𝗋𝗈𝗏𝖾 𝗇𝖾𝗐 𝖺𝗌 𝗐𝖾𝗅𝗅 𝖺𝗌 𝗉𝖾𝗇𝖽𝗂𝗇𝗀 𝗃𝗈𝗂𝗇 𝗋𝖾𝗊𝗎𝖾𝗌𝗍 𝗂𝗇 𝗒𝗈𝗎𝗋 𝖼𝗁𝖺𝗇𝗇𝖾𝗅𝗌 𝗈𝗋 𝗀𝗋𝗈𝗎𝗉𝗌.\n\n𝖩𝗎𝗌𝗍 𝖺𝖽𝖽 𝗆𝖾 𝗂𝗇 𝗒𝗈𝗎𝗋 𝖼𝗁𝖺𝗇𝗇𝖾𝗅𝗌 𝖺𝗇𝖽 𝗀𝗋𝗈𝗎𝗉𝗌 𝗐𝗂𝗍𝗁 𝗉𝖾𝗋𝗆𝗂𝗌𝗌𝗂𝗈𝗇 𝗍𝗈 𝖺𝖽𝖽 𝗇𝖾𝗐 𝗆𝖾𝗆𝖻𝖾𝗋𝗌.\n\n**<blockquote>ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ : <a href='https://telegram.me/CallOwnerBot'>ʀᴀʜᴜʟ</a></blockquote>**",
+        f"{m.from_user.mention},\n\n𝖨 𝖼𝖺𝗇 𝖺𝗎𝗍𝗈𝗆𝖺𝗍𝗂𝖼𝖺𝗅𝗅𝗒 𝖺𝗉𝗉𝗋𝗈𝗏𝖾 𝗇𝖾𝗐 𝖺𝗌 𝗐𝖾𝗅𝗅 𝖺𝗌 𝗉𝖾𝗇𝖽𝗂𝗇𝗀 𝗃𝗈𝗂𝗇 𝗋𝖾𝗊𝗎𝖾𝗌𝗍 𝗂𝗇 𝗒𝗈𝗎𝗋 𝖼𝗁𝖺𝗇𝗇𝖾𝗅𝗌 𝗈𝗋 𝗀𝗋𝗈𝗎𝗉𝗌.\n\n𝖩𝗎𝗌𝗍 𝖺𝖽𝖽 𝗆𝖾 𝗂𝗇 𝗒𝗈𝗎𝗋 𝖼𝗁𝖺𝗇𝗇𝖾𝗅𝗌 𝖺𝗇𝖽 𝗀𝗋𝗈𝗎𝗉𝗌 𝗐𝗂𝗍𝗁 𝗉𝖾𝗋𝗆𝗂𝗌𝗌𝗂𝗈𝗇 𝗍𝗈 𝖺𝖽𝖽 𝗇𝖾𝗐 𝗆𝖾𝗆𝖻𝖾𝗋𝗌.\n\n𝖴𝗌𝖾 /help 𝖿𝗈𝗋 𝖼𝗈𝗆𝗆𝖺𝗇𝖽𝗌 𝖺𝗇𝖽 𝖽𝖾𝗍𝖺𝗂𝗅𝗌.\n\n**<blockquote>ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ : <a href='https://telegram.me/CallOwnerBot'>ʀᴀʜᴜʟ</a></blockquote>**",
         reply_markup=InlineKeyboardMarkup(
             [[
                 InlineKeyboardButton("⇆ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘs ⇆", url=f"https://telegram.me/QuickAcceptBot?startgroup=true&admin=invite_users"),
             ],[
-                InlineKeyboardButton("• ᴜᴩᴅᴀᴛᴇꜱ •", url="https://telegram.me/StreamExplainer"),
+                InlineKeyboardButton("• ᴜᴩᴅᴀᴛᴇꜱ •", url="https://telegram.me/TechifyBots"),
                 InlineKeyboardButton("• ꜱᴜᴩᴩᴏʀᴛ •", url="https://telegram.me/TechifySupport")
             ],[
                 InlineKeyboardButton("⇆ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ᴄʜᴀɴɴᴇʟ ⇆", url=f"https://telegram.me/QuickAcceptBot?startchannel=true&admin=invite_users")
@@ -104,53 +49,66 @@ async def users(bot, message):
    )
 
 @Client.on_message(filters.command("broadcast") & filters.user(ADMINS) & filters.reply)
-async def verupikkals(bot, message):
+async def broadcast_handler(bot, message):
     users = await db.get_all_users()
     b_msg = message.reply_to_message
-    sts = await message.reply_text(
-        text='Broadcasting your messages...'
-    )
-    
-    start_time = time.time()
     total_users = await db.total_users_count()
     
-    # Counters
-    done = 0
-    success = 0
-    blocked = 0
-    deleted = 0
-    failed = 0
+    sts = await message.reply_text(f"📢 **Broadcasting started...**\nTotal Users: {total_users}")
+    
+    done, success, blocked, deleted, failed = 0, 0, 0, 0, 0
+    start_time = time.time()
 
-    async for user in users:
-        if 'id' in user:
-            pti, status = await broadcast_messages(int(user['id']), b_msg)
-            if pti:
-                success += 1
-            else:
-                if status == "Blocked":
-                    blocked += 1
-                elif status == "Deleted":
-                    deleted += 1
-                else:  # Handles "Error" case
-                    failed += 1
-            done += 1
-            
-            # Add a small delay to prevent hitting Telegram's rate limits
-            await asyncio.sleep(0.5)  # Adjust as needed (0.5 to 1.0 seconds is ideal)
-
-            # Update status message every 20 users
-            if done % 20 == 0:
-                await sts.edit(f"Broadcast in progress:\n\nTotal Users: {total_users}\nCompleted: {done} / {total_users}\nSuccess: {success}\nBlocked: {blocked}\nDeleted: {deleted}\nFailed: {failed}")    
-        else:
-            # Handle missing 'id' key
-            done += 1
+    async def send_message(user):
+        nonlocal success, blocked, deleted, failed, done
+        try:
+            await b_msg.copy(chat_id=int(user['id']))
+            success += 1
+        except FloodWait as e:
+            await asyncio.sleep(e.value)
+            return await send_message(user)  # Retry after delay
+        except InputUserDeactivated:
+            await db.delete_user(int(user['id']))
+            deleted += 1
+        except UserIsBlocked:
+            await db.delete_user(int(user['id']))
+            blocked += 1
+        except PeerIdInvalid:
+            await db.delete_user(int(user['id']))
             failed += 1
-            if done % 20 == 0:
-                await sts.edit(f"Broadcast in progress:\n\nTotal Users: {total_users}\nCompleted: {done} / {total_users}\nSuccess: {success}\nBlocked: {blocked}\nDeleted: {deleted}\nFailed: {failed}")    
+        except Exception as e:
+            logging.error(f"Broadcast error for {user['id']}: {e}")
+            failed += 1
+        done += 1
 
-    # Broadcast completed
-    time_taken = datetime.timedelta(seconds=int(time.time() - start_time))
-    await sts.edit(f"Broadcast Completed:\nCompleted in {time_taken} seconds.\n\nTotal Users: {total_users}\nCompleted: {done} / {total_users}\nSuccess: {success}\nBlocked: {blocked}\nDeleted: {deleted}\nFailed: {failed}")
+    # Process users in small batches with async tasks
+    batch_size = 100
+    for i in range(0, len(users), batch_size):
+        batch = users[i : i + batch_size]
+        await asyncio.gather(*(send_message(user) for user in batch))
+        
+        # Update status message after every batch
+        await sts.edit(
+            f"📢 **Broadcast in progress...**\n\n"
+            f"Total Users: {total_users}\n"
+            f"Completed: {done} / {total_users}\n"
+            f"✅ Success: {success}\n"
+            f"🚫 Blocked: {blocked}\n"
+            f"❌ Deleted: {deleted}\n"
+            f"⚠️ Failed: {failed}"
+        )
+        await asyncio.sleep(1)  # Small delay between batches
+
+    time_taken = str(datetime.timedelta(seconds=int(time.time() - start_time)))
+    await sts.edit(
+        f"✅ **Broadcast Completed!**\n\n"
+        f"⏳ Time Taken: {time_taken}\n"
+        f"👥 Total Users: {total_users}\n"
+        f"✅ Success: {success}\n"
+        f"🚫 Blocked: {blocked}\n"
+        f"❌ Deleted: {deleted}\n"
+        f"⚠️ Failed: {failed}"
+    )
 
 @Client.on_message(filters.command('accept') & filters.private)
 async def accept(client, message):
