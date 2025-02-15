@@ -182,7 +182,6 @@ async def approve_new(client, m):
     try:
         if not await db.is_user_exist(m.from_user.id):
             await db.add_user(m.from_user.id, m.from_user.first_name)
-            await client.send_message(LOG_CHANNEL, LOG_TEXT.format(m.from_user.id, m.from_user.mention))
         await client.approve_chat_join_request(m.chat.id, m.from_user.id)
         try:
             await client.send_message(m.from_user.id, "{},\n\n𝖸𝗈𝗎𝗋 𝖱𝖾𝗊𝗎𝗌𝗍 𝖳𝗈 𝖩𝗈𝗂𝗇 {} 𝖺𝗌 𝖻𝖾𝖾𝗇 𝖠𝖼𝖼𝖾𝗉𝗍𝖾𝖽.".format(m.from_user.mention, m.chat.title))
