@@ -79,66 +79,51 @@ async def users(bot, message):
    )
 
 @Client.on_message(filters.command("broadcast") & filters.user(ADMINS) & filters.reply)
-async def broadcast_handler(bot, message):
+async def broadcast(bot, message):
     users = await db.get_all_users()
     b_msg = message.reply_to_message
-    total_users = await db.total_users_count()
+    sts = await message.reply_text("Broadcasting your messages...")
     
-    sts = await message.reply_text(f"📢 **Broadcasting started...**\nTotal Users: {total_users}")
-    
-    done, success, blocked, deleted, failed = 0, 0, 0, 0, 0
     start_time = time.time()
+    total_users = await db.total_users_count()
 
-    async def send_message(user):
-        nonlocal success, blocked, deleted, failed, done
-        try:
-            await b_msg.copy(chat_id=int(user['id']))
-            success += 1
-        except FloodWait as e:
-            await asyncio.sleep(e.value)
-            return await send_message(user)  # Retry after delay
-        except InputUserDeactivated:
-            await db.delete_user(int(user['id']))
-            deleted += 1
-        except UserIsBlocked:
-            await db.delete_user(int(user['id']))
-            blocked += 1
-        except PeerIdInvalid:
-            await db.delete_user(int(user['id']))
-            failed += 1
-        except Exception as e:
-            logging.error(f"Broadcast error for {user['id']}: {e}")
-            failed += 1
-        done += 1
+    # Initialize Counters
+    done, blocked, deleted, failed, success = 0, 0, 0, 0, 0
 
-    # Process users in small batches with async tasks
-    batch_size = 100
-    for i in range(0, len(users), batch_size):
-        batch = users[i : i + batch_size]
-        await asyncio.gather(*(send_message(user) for user in batch))
-        
-        # Update status message after every batch
-        await sts.edit(
-            f"📢 **Broadcast in progress...**\n\n"
-            f"Total Users: {total_users}\n"
-            f"Completed: {done} / {total_users}\n"
-            f"✅ Success: {success}\n"
-            f"🚫 Blocked: {blocked}\n"
-            f"❌ Deleted: {deleted}\n"
-            f"⚠️ Failed: {failed}"
-        )
-        await asyncio.sleep(1)  # Small delay between batches
+    async for user in users:
+        if 'id' in user:
+            user_id = int(user['id'])
+            try:
+                await b_msg.copy(chat_id=user_id)
+                success += 1
+            except FloodWait as e:
+                await asyncio.sleep(e.value)
+                try:
+                    await b_msg.copy(chat_id=user_id)
+                    success += 1
+                except Exception:
+                    failed += 1
+            except InputUserDeactivated:
+                await db.delete_user(user_id)
+                logging.info(f"{user_id} - Removed from database (Deleted Account).")
+                deleted += 1
+            except UserIsBlocked:
+                await db.delete_user(user_id)
+                logging.info(f"{user_id} - Blocked the bot.")
+                blocked += 1
+            except PeerIdInvalid:
+                await db.delete_user(user_id)
+                logging.info(f"{user_id} - PeerIdInvalid")
+                failed += 1
+            except Exception:
+                failed += 1
+            
+            done += 1
+            if not done % 20:
+                await sts.edit(f"Broadcast in progress:\n\nTotal Users: {total_users}\nCompleted: {done}/{total_users}\nSuccess: {success}\nBlocked: {blocked}\nDeleted: {deleted}")
 
-    time_taken = str(datetime.timedelta(seconds=int(time.time() - start_time)))
-    await sts.edit(
-        f"✅ **Broadcast Completed!**\n\n"
-        f"⏳ Time Taken: {time_taken}\n"
-        f"👥 Total Users: {total_users}\n"
-        f"✅ Success: {success}\n"
-        f"🚫 Blocked: {blocked}\n"
-        f"❌ Deleted: {deleted}\n"
-        f"⚠️ Failed: {failed}"
-    )
+    time_taken = datetime.timedelta(seconds=int(time.time() - start_time))
+    await sts.edit(f"Broadcast Completed:\nCompleted in {time_taken} seconds.\n\nTotal Users: {total_users}\nCompleted: {done}/{total_users}\nSuccess: {success}\nBlocked: {blocked}\nDeleted: {deleted}")
 
 @Client.on_message(filters.command('accept') & filters.private)
 async def accept(client, message):
