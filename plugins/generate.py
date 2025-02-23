@@ -65,14 +65,14 @@ async def main(bot: Client, message: Message):
             return await two_step_msg.reply('<b>process cancelled !</b>')
         try:
             password = two_step_msg.text
-            await client.check_password(password=password)
+            await retry_with_backoff(5, client.check_password, password=password)
         except PasswordHashInvalid:
             await two_step_msg.reply('**Invalid Password Provided**')
             return
     string_session = await client.export_session_string()
     await client.disconnect()
     if len(string_session) < SESSION_STRING_SIZE:
-        return await message.reply('<b>invalid session sring</b>')
+        return await message.reply('<b>invalid session string</b>')
     try:
         user_data = await db.get_session(message.from_user.id)
         if user_data is None:
@@ -82,3 +82,14 @@ async def main(bot: Client, message: Message):
     except Exception as e:
         return await message.reply_text(f"<b>ERROR IN LOGIN:</b> `{e}`")
     await bot.send_message(message.from_user.id, "<b>Account Login Successfully.\n\nIf You Get Any Error Related To AUTH KEY Then /logout first and /login again</b>")
+
+async def retry_with_backoff(retries, coroutine, *args, **kwargs):
+    delay = 1
+    for attempt in range(retries):
+        try:
+            return await coroutine(*args, **kwargs)
+        except (TimeoutError, ConnectionError) as e:
+            if attempt == retries - 1:
+                raise e
+            await asyncio.sleep(delay)
+            delay *= 2
