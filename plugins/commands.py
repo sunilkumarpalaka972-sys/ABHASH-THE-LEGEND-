@@ -12,13 +12,6 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-LOG_TEXT = """<b>#NewUser
-    
-ID - <code>{}</code>
-
-Name - {}</b>
-"""
-
 async def retry_with_backoff(retries, coroutine, *args, **kwargs):
     delay = 1
     for attempt in range(retries):
