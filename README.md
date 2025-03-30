@@ -13,7 +13,7 @@
  - Automatically approve join request in channel Or groups.
  - Pending request also approved in channel Or groups.
 - Fully modified repo
-- Force Sub available
+- Multi Force Sub available
 - Broadcast available
 - Deploy To Koyeb + Heroku + Railway + Render + VPS + Okteto
 - [Developer support](https://telegram.me/TechifySupport) 24x7
