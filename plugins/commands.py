@@ -1,6 +1,6 @@
 import asyncio 
 from pyrogram import Client, filters, enums
-from config import LOG_CHANNEL, API_ID, API_HASH, NEW_REQ_MODE, ADMINS, AUTH_CHANNEL
+from config import *
 from plugins.database import db
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import InputUserDeactivated, UserNotParticipant, FloodWait, UserIsBlocked, PeerIdInvalid
@@ -28,31 +28,6 @@ async def retry_with_backoff(retries, coroutine, *args, **kwargs):
                 raise e
             await asyncio.sleep(delay)
             delay *= 2
-
-async def get_fsub(bot, message):
-    target_channel_id = AUTH_CHANNEL  # Your channel ID
-    user_id = message.from_user.id
-    try:
-        # Check if user is a member of the required channel
-        await retry_with_backoff(5, bot.get_chat_member, target_channel_id, user_id)
-    except UserNotParticipant:
-        # Generate the channel invite link
-        channel_link = (await bot.get_chat(target_channel_id)).invite_link
-        join_button = InlineKeyboardButton("🔔 Join Our Channel", url=channel_link)
-
-        # Display a message encouraging the user to join
-        keyboard = [[join_button]]
-        await message.reply(
-            f"<b>👋 Hello {message.from_user.mention()}, Welcome!</b>\n\n"
-            "📢 <b>Exclusive Access Alert!</b> ✨\n\n"
-            "To unlock all the amazing features I offer, please join our updates channel. "
-            "This helps us keep you informed and ensures top-notch service just for you! 😊\n\n"
-            "<i>🚀 Join now and dive into a world of knowledge and creativity!</i>",
-            reply_markup=InlineKeyboardMarkup(keyboard),
-        )
-        return False
-    else:
-        return True
 
 @Client.on_message(filters.command('start'))
 async def start_message(c, m):
