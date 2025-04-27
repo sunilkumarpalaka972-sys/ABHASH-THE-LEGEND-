@@ -1,4 +1,5 @@
 from os import environ
+from typing import List
 
 API_ID = int(environ.get("API_ID", ""))
 API_HASH = environ.get("API_HASH", "")
@@ -8,6 +9,5 @@ ADMINS = int(environ.get("ADMINS", ""))
 DB_URI = environ.get("DB_URI", "")
 DB_NAME = environ.get("DB_NAME", "autoacceptbot")
 NEW_REQ_MODE = bool(environ.get('NEW_REQ_MODE', True))
-IS_FSUB = bool(environ.get("FSUB", True))
-AUTH_CHANNELS = environ.get("AUTH_CHANNEL", "")
-AUTH_CHANNELS = [int(channel_id) for channel_id in AUTH_CHANNELS.split(",")]
+IS_FSUB = bool(environ.get("FSUB", True)) # Set "True" For Enable Force Subscribe
+AUTH_CHANNELS = list(map(int, environ.get("AUTH_CHANNEL", "-100xxxxxxxxx -100xxxxxxx").split())) # Add Multiple channel id
