@@ -45,23 +45,16 @@ broadcast - Broadcast Massage Send All Users In Bot.
   - `ADMINS` - bot owners Id/ ids ( for broadcast and stats cmds). for multiple use space.
 </details>
 
-### 🥳 CREDIT
+### 💞 CREDIT
 
-<details><summary>Tap On Me For Credit</summary>
+- [TechifyBots](https://github.com/TechifyBots)
 
-
-💖 [TechifyBots](https://github.com/TechifyBots)
-
-💞 [VJBots](https://github.com/VJBots)
+- [Vijay](https://github.com/VJBots)
 </details>
 
-### 💕 CONTACT DEVELOPER
+### 😇 [SUPPORT](https://techifybots.github.io/PayWeb)
 
-- [Rahul](https://telegram.me/TechifySupport)
-
-### ☕ BUY ME A COFFEE
-- [PayPal](https://paypal.me/TechifyBots)
-- [UPI](https://TechifyBots.github.io/Donate)
+### 🥳 [CONTACT DEVELOPER](https://telegram.me/TechifySupport)
 
 ### 📌 NOTE
 
