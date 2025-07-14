@@ -6,38 +6,34 @@ from config import ADMIN
 @Client.on_callback_query()
 async def callback_query_handler(client, query: CallbackQuery):
     if query.data == "start":
-        await query.message.edit_text(
-            text.START.format(query.from_user.mention),
-            disable_web_page_preview=True,
+        await query.message.edit_caption(
+            caption=text.START.format(query.from_user.mention),
             reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton('⇆ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘs ⇆', url=f"https://telegram.me/QuickAcceptBot?startgroup=true&admin=invite_users")],
-                [InlineKeyboardButton('ᴀʙᴏᴜᴛ', callback_data='about'),
-                 InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help')],
-                [InlineKeyboardButton('⇆ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ᴄʜᴀɴɴᴇʟ ⇆', url=f"https://telegram.me/QuickAcceptBot?startchannel=true&admin=invite_users")]
+                [InlineKeyboardButton('⇆ 𝖠𝖽𝖽 𝖬𝖾 𝖳𝗈 𝖸𝗈𝗎𝗋 𝖦𝗋𝗈𝗎𝗉 ⇆', url=f"https://telegram.me/QuickAcceptBot?startgroup=true&admin=invite_users")],
+                [InlineKeyboardButton('ℹ️ 𝖠𝖻𝗈𝗎𝗍', callback_data='about'),
+                 InlineKeyboardButton('📚 𝖧𝖾𝗅𝗉', callback_data='help')],
+                [InlineKeyboardButton('⇆ 𝖠𝖽𝖽 𝖬𝖾 𝖳𝗈 𝖸𝗈𝗎𝗋 𝖢𝗁𝖺𝗇𝗇𝖾𝗅 ⇆', url=f"https://telegram.me/QuickAcceptBot?startchannel=true&admin=invite_users")]
             ])
         )
 
     elif query.data == "help":
-        await query.message.edit_text(
-            text.HELP.format(query.from_user.mention),
-            disable_web_page_preview=True,
+        await query.message.edit_caption(
+            caption=text.HELP.format(query.from_user.mention),
             reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton('ᴜᴩᴅᴀᴛᴇꜱ', url='https://telegram.me/Techifybots'),
-                 InlineKeyboardButton('ꜱᴜᴩᴩᴏʀᴛ', url='https://telegram.me/TechifySupport')],
-                [InlineKeyboardButton('ʙᴀᴄᴋ', callback_data="start"),
-                 InlineKeyboardButton('ᴄʟᴏꜱᴇ', callback_data="close")]
+                [InlineKeyboardButton('📢 𝖴𝗉𝖽𝖺𝗍𝖾𝗌', url='https://telegram.me/Techifybots'),
+                 InlineKeyboardButton('💬 𝖲𝗎𝗉𝗉𝗈𝗋𝗍', url='https://telegram.me/TechifySupport')],
+                [InlineKeyboardButton('↩️ 𝖡𝖺𝖼𝗄', callback_data="start"),
+                 InlineKeyboardButton('❌ 𝖢𝗅𝗈𝗌𝖾', callback_data="close")]
             ])
         )
 
     elif query.data == "about":
-        await query.message.edit_text(
-            text.ABOUT,
-            disable_web_page_preview=True,
+        await query.message.edit_caption(
+            caption=text.ABOUT,
             reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton('💥 ʀᴇᴘᴏ', url='https://github.com/TechifyBots/Auto-Approve-Bot'),
-                 InlineKeyboardButton('👨‍💻 ᴏᴡɴᴇʀ', user_id=int(ADMIN))],
-                [InlineKeyboardButton("ʙᴀᴄᴋ", callback_data="start"),
-                 InlineKeyboardButton("ᴄʟᴏꜱᴇ", callback_data="close")]
+                [InlineKeyboardButton('👨‍💻 𝖣𝖾𝗏𝖾𝗅𝗈𝗉𝖾𝗋 👨‍💻', user_id=int(ADMIN))],
+                [InlineKeyboardButton("↩️ 𝖡𝖺𝖼𝗄", callback_data="start"),
+                 InlineKeyboardButton("❌ 𝖢𝗅𝗈𝗌𝖾", callback_data="close")]
             ])
         )
 
