@@ -1,8 +1,9 @@
+import asyncio
+import random
 from pyrogram import Client, filters, enums
 from pyrogram.errors import *
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 from config import *
-import asyncio
 from Script import text
 from .db import tb
 from .fsub import get_fsub
