@@ -11,19 +11,26 @@ from .fsub import get_fsub
 async def start_cmd(client, message):
     if await tb.get_user(message.from_user.id) is None:
         await tb.add_user(message.from_user.id, message.from_user.first_name)
+        bot = await client.get_me()
         await client.send_message(
             LOG_CHANNEL,
-            text.LOG.format(message.from_user.mention, message.from_user.id)
+            text.LOG.format(
+                message.from_user.id,
+                getattr(message.from_user, "dc_id", "N/A"),
+                message.from_user.first_name or "N/A",
+                f"@{message.from_user.username}" if message.from_user.username else "N/A",
+                bot.username
+            )
         )
     if IS_FSUB and not await get_fsub(client, message): return
-    await message.reply_text(
-        text.START.format(message.from_user.mention),
-        disable_web_page_preview=True,
+    await message.reply_photo(
+        photo=PIC,
+        caption=text.START.format(message.from_user.mention),
         reply_markup=InlineKeyboardMarkup([
-            [InlineKeyboardButton('⇆ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘs ⇆', url=f"https://telegram.me/QuickAcceptBot?startgroup=true&admin=invite_users")],
-            [InlineKeyboardButton('ᴀʙᴏᴜᴛ', callback_data='about'),
-             InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help')],
-            [InlineKeyboardButton('⇆ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ᴄʜᴀɴɴᴇʟ ⇆', url=f"https://telegram.me/QuickAcceptBot?startchannel=true&admin=invite_users")]
+            [InlineKeyboardButton('⇆ 𝖠𝖽𝖽 𝖬𝖾 𝖳𝗈 𝖸𝗈𝗎𝗋 𝖦𝗋𝗈𝗎𝗉 ⇆', url=f"https://telegram.me/QuickAcceptBot?startgroup=true&admin=invite_users")],
+            [InlineKeyboardButton('ℹ️ 𝖠𝖻𝗈𝗎𝗍', callback_data='about'),
+             InlineKeyboardButton('📚 𝖧𝖾𝗅𝗉', callback_data='help')],
+            [InlineKeyboardButton('⇆ 𝖠𝖽𝖽 𝖬𝖾 𝖳𝗈 𝖸𝗈𝗎𝗋 𝖢𝗁𝖺𝗇𝗇𝖾𝗅 ⇆', url=f"https://telegram.me/QuickAcceptBot?startchannel=true&admin=invite_users")]
             ])
         )
 
