@@ -24,7 +24,7 @@
 <b><details><summary>Tap On Me For Commands</summary>
 ```
 start - Check Bot Alive.
-users - Check total users.
+stats - Check bot stats.
 login : login your telegram account for string session
 logout : logout your telegram account
 accept : accept all pending request form channel or group.
