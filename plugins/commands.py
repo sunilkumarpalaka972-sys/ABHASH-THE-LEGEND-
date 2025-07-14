@@ -25,7 +25,7 @@ async def start_cmd(client, message):
     if IS_FSUB and not await get_fsub(client, message): return
     await message.reply_photo(
         photo=random.choice(PICS),
-        caption==text.START.format(message.from_user.mention),
+        caption=text.START.format(message.from_user.mention),
         reply_markup=InlineKeyboardMarkup([
             [InlineKeyboardButton('⇆ 𝖠𝖽𝖽 𝖬𝖾 𝖳𝗈 𝖸𝗈𝗎𝗋 𝖦𝗋𝗈𝗎𝗉 ⇆', url=f"https://telegram.me/QuickAcceptBot?startgroup=true&admin=invite_users")],
             [InlineKeyboardButton('ℹ️ 𝖠𝖻𝗈𝗎𝗍', callback_data='about'),
