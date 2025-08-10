@@ -15,6 +15,7 @@
 - Fully modified repo
 - Multi Force Sub available
 - Broadcast available
+- Maintenance mode
 - Deploy To Koyeb + Heroku + Railway + Render + VPS + Okteto
 - [Developer support](https://telegram.me/TechifySupport) 24x7
 </details>
@@ -28,6 +29,7 @@ stats - Check bot stats.
 login : login your telegram account for string session
 logout : logout your telegram account
 accept : accept all pending request form channel or group.
+maintenance - Toggle maintenance mode
 broadcast - Broadcast Massage Send All Users In Bot.
 ```
 </details>
