@@ -29,6 +29,7 @@ async def logout(client, message):
 @Client.on_message(filters.private & ~filters.forwarded & filters.command(["login"]))
 async def main(bot: Client, message: Message):
     if await get_maintenance() and message.from_user.id != ADMIN:
+        await message.delete()
         return await message.reply_text("**🛠️ Bot is Under Maintenance**", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Support", user_id=int(ADMIN))]]))
     user_id = message.from_user.id
     session = await tb.get_session(user_id)
