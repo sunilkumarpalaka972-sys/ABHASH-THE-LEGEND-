@@ -9,7 +9,7 @@ routes = web.RouteTableDef()
 
 @routes.get("/", allow_head=True)
 async def root_route(request):
-    return web.Response(text="<h3 align='center'><b>I am Alive</b></h3>", content_type='text/html')
+    return web.Response(text="I am Alive", content_type='text/html')
 
 async def web_server():
     app = web.Application(client_max_size=30_000_000)
@@ -23,7 +23,7 @@ class Bot(Client):
             api_id=API_ID,
             api_hash=API_HASH,
             bot_token=BOT_TOKEN,
-            plugins=dict(root="TechifyBots"),
+            plugins=dict(root="plugins"),
             workers=200,
             sleep_threshold=15
         )
@@ -63,4 +63,5 @@ class Bot(Client):
         await super().stop()
         print(f"{me.first_name} Bot stopped.")
 
+Bot().run()
 Bot().run()
